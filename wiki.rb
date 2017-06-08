@@ -1,0 +1,25 @@
+require 'sinatra'
+
+def page_content(title)
+  File.read("pages/#{title}.txt")
+rescue ERRno::ENOENT
+  return nil
+end
+
+def save_content(title, content)
+  File.open("pages/#{title}.txt", "w") do |file|
+    file.print(content)
+  end
+end
+
+
+get '/' do
+  erb :welcome
+end
+
+
+get '/:title' do
+  @title = params[:title]
+  @content = page_content(@title)
+  erb :show
+end
